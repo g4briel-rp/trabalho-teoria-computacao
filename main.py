@@ -4,12 +4,14 @@ import numpy as np
 if __name__ == '__main__':
     doc = Document('MT-deterministica.docx')
 
+    # LER A LINHA, SEPARAR PELA VIRGULA E ADICIONAR OS ITENS SEPARADOS
+
     # para acessar individualmente uma posição do array, usar array[num][num]
      
     # estados possíveis da MT
     estados = np.array([doc.paragraphs[0].text.replace("'", "").replace(";", "")])
 
-    alfabeto_de_entrada = np.array([doc.paragraphs[1].text.replace(",", "").replace(";", "")])
+    alfabeto_de_entrada = np.array([doc.paragraphs[1].text])
 
     alfabeto_da_fita = np.array([doc.paragraphs[2].text.replace(",", "").replace(";", "")])
 
@@ -29,5 +31,11 @@ if __name__ == '__main__':
     doc2 = Document('entradas.docx') 
     
     # entradas da MT
-    entradas = np.array([doc2.paragraphs.text])
-    print(entradas)
+    entradas = np.array([paragrafo.text for paragrafo in doc2.paragraphs])
+
+    for palavras in entradas:
+        for caractere in palavras:
+            # print(caractere, '\n')
+            print(alfabeto_de_entrada, '\n')
+            if caractere in alfabeto_de_entrada:
+                print('aqui\n') 
