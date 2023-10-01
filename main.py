@@ -4,7 +4,7 @@ import numpy as np
 if __name__ == '__main__':
     doc = Document('MT-deterministica.docx')
 
-    # para acessar individualmente uma posição do array, usar array[num][num]
+    # para acessar individualmente uma posição do array, usar array[num]
      
     # estados possíveis da MT
     estados = doc.paragraphs[0].text.split(',')
@@ -13,6 +13,7 @@ if __name__ == '__main__':
 
     alfabeto_da_fita = doc.paragraphs[2].text.split(',')
 
+    # para acessar individualmente uma posição do array, usar array[num][num]
     #col1               col2        col3            col4        col5 
     #estadoAtual        lendo       proxEstado      escrevo     paraOndeVou
 
