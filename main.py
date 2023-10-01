@@ -19,7 +19,7 @@ if __name__ == '__main__':
     #estadoAtual        lendo       proxEstado      escrevo     paraOndeVou (R ou L)
 
     # todas as transições da MT
-    transicoes = [paragrafo.text.replace(";", ",").split(',') for paragrafo in doc.paragraphs[3:22]]
+    transicoes = [paragrafo.text.replace(";", ",").split(',') for paragrafo in doc.paragraphs[3:23]]
     # print(transicoes)
 
     # especificação dos estados da MT
@@ -33,27 +33,30 @@ if __name__ == '__main__':
     
     # entradas da MT
     entradas = [paragrafo.text for paragrafo in doc2.paragraphs]
-    estado_atual = estado_inicial[0]
-    
-
     # print(entradas)
-
+    existeTransicao = True
     for palavras in entradas:
         flag = False
+        estado_atual = estado_inicial[0]
         posicao_da_fita = 0
         copia = copy.copy(palavras)
 
         # print(caractere)
         # print(alfabeto_de_entrada, '\n')
-        print('tamanho: ', len(palavras))
+        # print('tamanho: ', len(palavras))
         while not flag:
-            print('posicao atual da fita: ', posicao_da_fita)
+            print('posicao atual da fita: ', posicao_da_fita,'tamanho: ', len(palavras))
             if palavras[posicao_da_fita] in alfabeto_da_fita:
                 
                 # para cada caracter da entrada
                 # verificar em qual estado estamos
-                      
+
+                # ------------------- COMO VERIFICAR SE A TRANSIÇÃO EXISTE -----------------------
+                
+                
+                
                 for t in transicoes:
+                    # se está em um estado de rejeicao e NÃO chegou no final da fita
                     if estado_atual in estado_rejeicao:
                         # se o estado atual existe
                         # e o caracter atual da entrada é igual caracter da transicao atual
@@ -67,14 +70,18 @@ if __name__ == '__main__':
                                         posicao_da_fita += 1
                                     elif t[4] == 'L':
                                         posicao_da_fita -= 1 
+                                    
+                                    print('estado atual: ', estado_atual,' le: ',t[1],' prox est: ',t[2],' escrevo: ',t[3], ' acao: ', t[4])
                                     estado_atual = t[2]
-                                    print('estado atual: ', estado_atual)
                                     break
-                    elif estado_atual in estado_aceitacao and palavras[posicao_da_fita] == '_':
-                        flag = True
-                        break
-                print('palavra original: ', copia)
-                print('apos alteracao: ', palavras)
+                        
+                # print((estado_atual in estado_aceitacao and palavras[posicao_da_fita] == '_'))
+                if estado_atual in estado_aceitacao:
+                    if posicao_da_fita == len(palavras):
+                        if palavras[posicao_da_fita - 1] == '_':
+                            flag = True
+                 
+                print('palavra original: ', copia, 'apos alteração: ', palavras)
                 input("Pressione Enter para continuar...")
             else:
                 print("Entrada com caracter não pertencente ao alfabeto!")
