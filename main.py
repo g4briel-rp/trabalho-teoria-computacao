@@ -1,7 +1,8 @@
 from docx import Document
 import copy
+import os
 
-if __name__ == '__main__':
+def MT_deterministica():
     doc = Document('MT-deterministica.docx')
 
     # para acessar individualmente uma posição do array, usar array[num]
@@ -29,60 +30,84 @@ if __name__ == '__main__':
 
     # ------------------------------------------------------------------------------------------------------------------------------------------
 
-    doc2 = Document('entradas.docx') 
+    entrada = input("Digite o nome do arquivo de leitura(incluindo a extensão): ")
+    doc2 = Document(entrada)
     
     # entradas da MT
     entradas = [paragrafo.text for paragrafo in doc2.paragraphs]
-    # print(entradas)
-    existeTransicao = True
+
     for palavras in entradas:
         flag = False
         estado_atual = estado_inicial[0]
         posicao_da_fita = 0
+        auxLeitura = 0
         copia = copy.copy(palavras)
 
-        # print(caractere)
-        # print(alfabeto_de_entrada, '\n')
-        # print('tamanho: ', len(palavras))
-        while not flag:
-            print('posicao atual da fita: ', posicao_da_fita,'tamanho: ', len(palavras))
-            if palavras[posicao_da_fita] in alfabeto_da_fita:
-                
-                # para cada caracter da entrada
-                # verificar em qual estado estamos
+        os.system('clear')
 
-                # ------------------- COMO VERIFICAR SE A TRANSIÇÃO EXISTE -----------------------
-                
-                
-                
+        while not flag:
+            print("posicao atual da fita: ", posicao_da_fita,"tamanho: ", len(palavras))
+
+            if(auxLeitura == 0 and palavras[posicao_da_fita] not in alfabeto_de_entrada):
+                os.system('clear')
+                print("Leitura de um caracter inválido!\n")
+                break
+
+            if palavras[posicao_da_fita] in alfabeto_da_fita:
+                existe_transicao = False
+
                 for t in transicoes:
-                    # se está em um estado de rejeicao e NÃO chegou no final da fita
-                    if estado_atual in estado_rejeicao:
-                        # se o estado atual existe
-                        # e o caracter atual da entrada é igual caracter da transicao atual
-                        if t[0] == estado_atual and palavras[posicao_da_fita] == t[1]:
-                            # se for igual, precisamos ver para qual estado a transicao direciona
-                            if t[2] in estados and t[3] in alfabeto_da_fita:
-                                palavras = palavras.replace(palavras[posicao_da_fita], t[3], 1)
-                                print('acao: ', t[4])
-                                if posicao_da_fita >= 0 and posicao_da_fita <= len(palavras):
-                                    if t[4] == 'R':
-                                        posicao_da_fita += 1
-                                    elif t[4] == 'L':
-                                        posicao_da_fita -= 1 
-                                    
-                                    print('estado atual: ', estado_atual,' le: ',t[1],' prox est: ',t[2],' escrevo: ',t[3], ' acao: ', t[4])
-                                    estado_atual = t[2]
-                                    break
-                        
-                # print((estado_atual in estado_aceitacao and palavras[posicao_da_fita] == '_'))
+                    if t[0] == estado_atual and t[1] == palavras[posicao_da_fita] and t[2] in estados and t[3] in alfabeto_da_fita:
+                        aux = t
+                        existe_transicao = True
+                        break
+                
+                if existe_transicao:
+                    palavras = palavras.replace(palavras[posicao_da_fita], aux[3], 1)
+                    if posicao_da_fita >= 0 and posicao_da_fita <= len(palavras):
+                        if aux[4] == 'R':
+                            posicao_da_fita += 1
+                        elif aux[4] == 'L':
+                            auxLeitura = 1
+                            posicao_da_fita -= 1 
+                        print("estado atual: ", estado_atual," le: ",aux[1]," prox est: ",aux[2]," escrevo: ",aux[3], " acao: ", aux[4])
+                        estado_atual = aux[2]
+                    else:
+                        print("\nFora do intervalo da fita permitido!\n")
+                        exit()
+                else:
+                    os.system('clear')
+                    print("Não existe transição do estado ", estado_atual, " lendo ", palavras[posicao_da_fita])
+                    print("Posição de parada da cabeça de leitura:", posicao_da_fita)
+                    print("Palavra rejeitada pela máquina")
+                    break
+
                 if estado_atual in estado_aceitacao:
                     if posicao_da_fita == len(palavras):
                         if palavras[posicao_da_fita - 1] == '_':
                             flag = True
+                            os.system('clear')
+                            print("A palavra foi aceita pela máquina")
                  
-                print('palavra original: ', copia, 'apos alteração: ', palavras)
-                input("Pressione Enter para continuar...")
+                print("palavra original: ", copia, "\napos alteração: ", palavras)
+                input("Pressione Enter para continuar...\n")
             else:
                 print("Entrada com caracter não pertencente ao alfabeto!")
                 break
+
+
+def MT_nao_deterministica():
+    # diferencia-se da MT-deterministica na questão de quando ler um caractere, poder ir para varios estados diferentes
+    # modificar o aux para guardar todas as transições possiveis, realizar a tentativa com uma, caso de errado tentar com a outra e assim por diante.
+    pass
+
+
+if __name__ == '__main__':
+    # usar a função nome-da-string.endswith para diferenciar a extenção do arquivo
+    
+    # print(entradas)
+
+    # MT_deterministica()
+    
+    MT_nao_deterministica()
+    
