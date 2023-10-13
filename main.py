@@ -44,6 +44,7 @@ def MT_deterministica():
         os.system('clear')
 
         while not flag:
+            palavras = list(palavras)
             print("posicao atual da fita: ", posicao_da_fita,"tamanho: ", len(palavras))
 
             if(auxLeitura == 0 and palavras[posicao_da_fita] not in alfabeto_de_entrada):
@@ -61,7 +62,7 @@ def MT_deterministica():
                         break
                 
                 if existe_transicao:
-                    palavras = palavras.replace(palavras[posicao_da_fita], aux[3], 1)
+                    palavras[posicao_da_fita] = aux[3]
                     if posicao_da_fita >= 0 and posicao_da_fita <= len(palavras):
                         if aux[4] == 'R':
                             posicao_da_fita += 1
@@ -87,7 +88,7 @@ def MT_deterministica():
                             os.system('clear')
                             print("A palavra foi aceita pela máquina")
                  
-                print("palavra original: ", copia, "\napos alteração: ", palavras)
+                print("palavra original: ", copia, "\napos alteração: ", ''.join(palavras))
                 input("Pressione Enter para continuar...\n")
             else:
                 print("Entrada com caracter não pertencente ao alfabeto!")
@@ -137,6 +138,7 @@ def MT_nao_deterministica():
         os.system('clear')
         
         while not flag:
+            palavras = list(palavras)
             print("posicao atual da fita: ", posicao_da_fita,"tamanho: ", len(palavras))
             
             if(auxLeitura == 0 and palavras[posicao_da_fita] not in alfabeto_de_entrada):
@@ -162,7 +164,7 @@ def MT_nao_deterministica():
                     if len(aux) > 1:
                         pass
                     elif len(aux) == 1:
-                        palavras = palavras.replace(palavras[posicao_da_fita], aux[0][3], 1)
+                        palavras[posicao_da_fita] = aux[0][3]
                         if posicao_da_fita >= 0 and posicao_da_fita <= len(palavras):
                             if aux[0][4] == 'R':
                                 posicao_da_fita += 1
@@ -188,7 +190,7 @@ def MT_nao_deterministica():
                             os.system('clear')
                             print("A palavra foi aceita pela máquina")
                     
-                print("palavra original: ", copia, "\napos alteração: ", palavras)
+                print("palavra original: ", copia, "\napos alteração: ", ''.join(palavras))
                 input("Pressione Enter para continuar...\n")
             else:
                 print("Entrada com caracter não pertencente ao alfabeto!")
